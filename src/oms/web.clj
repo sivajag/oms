@@ -17,6 +17,8 @@
      (print-vals (handler request))
      (catch [:type :not-found] e
        (print-vals (error-response e)))
+     (catch [:type :bad-request] e
+       (print-vals (error-response e)))
      (catch Exception e
        (print-vals e)
        (json-response {:error (.getMessage e)})))))

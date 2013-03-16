@@ -20,20 +20,21 @@
   (vals @STORE))
 
 (defn find-order [id]
-  (print-vals "ID : " id)
   (if-let [o ((keyword id) @STORE)]
     o
     (throw+ {:type :not-found :message "Order is not present with given ID"})))
 
 (defn update [id attrs]
-  (let [updated-attrs (merge (find id) attrs)]
+  (let [updated-attrs (merge (find-order id) attrs)]
     (swap! STORE assoc id updated-attrs)
     updated-attrs))
 
 (defn delete [id]
-  (let [old-attrs (find id)]
-    (swap! STORE dissoc id)
-    old-attrs))
+  (let [o (find-order id)]
+    (if (= "PAID" (:status o))
+      (do (swap! STORE dissoc (:id o))
+          {})
+      (throw+ {:type :bad-request :message (str "Order is already " (:status o))}))))
 
 
 
