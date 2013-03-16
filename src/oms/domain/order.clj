@@ -3,10 +3,9 @@
         oms.utils))
 
 (def STORE (atom
-            {:1 {:id :1 :products [:p1 :p2 :p3] :status "UNPAID"}
-             :2 {:id :2 :products [:p2 :p4 :p6] :status "PAID"}
-             :3 {:id :3 :products [:p3 :p6 :p9] :status "SHIPPED"}
-             :4 {:id :4 :products [:p3 :p6 :p9] :status "DELIVERED"}}))
+            {:1 {:id :1 :products [:p1 :p2 :p3] :status "PAID"}
+             :2 {:id :2 :products [:p2 :p4 :p6] :status "SHIPPED"}
+             :3 {:id :3 :products [:p3 :p6 :p9] :status "DELIVERED"}}))
 
 (defn- new-order-id []
   (keyword (str (rand))))
