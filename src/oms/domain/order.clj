@@ -34,7 +34,7 @@
     (if (= "PAID" (:status o))
       (do (swap! STORE dissoc (:id o))
           {})
-      (throw+ {:type :bad-request :message (str "Order is already " (:status o))}))))
+      (throw+ {:type :method-not-allowed :message (str "Order is already " (:status o))}))))
 
 
 

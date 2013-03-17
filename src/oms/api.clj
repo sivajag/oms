@@ -1,9 +1,17 @@
 (ns oms.api
-  (:use oms.utils)
+  (:use oms.utils
+        [slingshot.slingshot :only [throw+ try+]])
   (:require [oms.domain.order :as order]))
 
+(defn order-url [o]
+  (str "/orders/" (name (:id o))))
+
 (defn create-order [params]
-  (order/create-order params))
+  (let [o (order/create-order params)]
+    {:status 201
+     :headers {"Content-Type" "application/json; charset=utf-8"
+               "Location " (order-url o)}
+     :body {}}))
 
 (defn list-orders []
   (order/find-all))

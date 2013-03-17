@@ -10,13 +10,13 @@
 
 (defroutes application-routes
 
-  (GET "/create_order" [params] (web/json-response (api/create-order params)))
+  (POST "/orders" [params] (api/create-order params))
 
-  (GET "/list_orders" [params] (web/json-response (api/list-orders)))
+  (GET "/orders" [params] (web/json-response (api/list-orders)))
 
-  (GET "/view_order/:order-id" [order-id] (web/json-response (api/view-order order-id)))
+  (GET "/orders/:order-id" [order-id] (web/json-response (api/view-order order-id)))
 
-  (GET "/cancel_order/:order-id" [order-id] (web/json-response (api/cancel-order order-id)))
+  (DELETE "/orders/:order-id" [order-id] (web/json-response (api/cancel-order order-id)))
   
   (route/not-found "Page not found"))
 

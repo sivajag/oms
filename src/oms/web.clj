@@ -3,22 +3,23 @@
         oms.utils)
   (:require [clojure.data.json :as json]))
 
-(defn json-response [data]
-  {:status 200
+(defn json-response [data & [status]]
+  {:status (or status 200)
    :headers {"Content-Type" "application/json; charset=utf-8"}
    :body (json/json-str data)})
 
-(defn error-response [error-object]
-  (json-response {:error (:message error-object)}))
+(defn error-response [error-object & [status]]
+  (json-response {:error (:message error-object)} (or status 500)))
 
 (defn wrap-error-handling [handler]
   (fn [request]
     (try+
-     (print-vals (handler request))
+     (handler request)
      (catch [:type :not-found] e
-       (print-vals (error-response e)))
+       (error-response e 404))
      (catch [:type :bad-request] e
-       (print-vals (error-response e)))
+       (error-response e 400))
+     (catch [:type :method-not-allowed] e
+       (error-response e 405))
      (catch Exception e
-       (print-vals e)
-       (json-response {:error (.getMessage e)})))))
+       (json-response {:error (.getMessage e)} 500)))))
